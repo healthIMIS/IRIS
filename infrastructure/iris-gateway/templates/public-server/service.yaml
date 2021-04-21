@@ -7,9 +7,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - nodePort: {{ add .Values.public.nodePort .Values.nodePortOffsets }}
-      port: {{ add .Values.public.nodePort .Values.nodePortOffsets }}
-      targetPort: http
+    - port: {{ .Values.public.port }}
+      targetPort: https
       protocol: TCP
       name: http
   selector:

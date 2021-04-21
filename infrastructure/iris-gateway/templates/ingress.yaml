@@ -1,0 +1,33 @@
+{{- if not (eq .Values.environment "local") }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "iris-gateway.fullname" . }}
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+spec:
+  rules:
+    - host: {{ index .Values.domains .Values.environment }}
+      http:
+        paths:
+          {{- range .Values.location.paths }}
+          - path: {{ . }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "iris-gateway.location" $ }}
+                port:
+                  number: {{ $.Values.location.port }}
+          {{- end }}
+          {{- range .Values.public.paths }}
+          - path: {{ . }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "iris-gateway.public" $ }}
+                port:
+                  number: {{ $.Values.public.port }}
+          {{- end }}
+{{- end }}

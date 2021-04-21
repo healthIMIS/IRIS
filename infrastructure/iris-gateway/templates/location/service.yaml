@@ -5,11 +5,9 @@ metadata:
   labels:
     {{- include "iris-gateway.location-labels" . | nindent 4 }}
 spec:
-  type: NodePort
   ports:
-    - nodePort: {{ add .Values.location.nodePort .Values.nodePortOffsets }}
-      port: {{ add .Values.location.nodePort .Values.nodePortOffsets }}
-      targetPort: http
+    - port: {{ .Values.location.port }}
+      targetPort: https
       protocol: TCP
       name: http
   selector:

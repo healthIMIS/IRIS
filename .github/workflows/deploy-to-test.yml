@@ -1,0 +1,19 @@
+name: Deploy iris-gateway to test environment
+
+on:
+  deployment:
+    environments: [test]
+
+jobs:
+  deployment:
+    runs-on: self-hosted
+    container: alpine/helm:3.5.4
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Prepare k8s config
+        run: rm -rf ~/.kube && mkdir ~/.kube && echo "${{ secrets.KUBECONFIG_TEST }}" > ~/.kube/config
+
+      - name: Run helm deployment
+        run: helm upgrade --install --namespace iris-gateway --set environment=test iris-gateway ./infrastructure/iris-gateway

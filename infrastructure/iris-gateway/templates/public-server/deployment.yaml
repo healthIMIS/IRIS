@@ -23,9 +23,22 @@ spec:
           imagePullPolicy: Always
           {{- end }}
           ports:
-            - name: http
-              containerPort: 8443
+            - name: https
+              containerPort: {{ .Values.public.port }}
               protocol: TCP
           envFrom:
             - secretRef:
                 name: {{ include "iris-gateway.postgres" . }}
+            - secretRef:
+                name: {{ .Values.tls.keystoreCredentialsSecretName }}
+          volumeMounts:
+            - mountPath: {{ .Values.tls.mountPath }}
+              name: tls-keystore
+              readOnly: true
+          env:
+            - name: KEYSTORE_PATH
+              value: {{ .Values.tls.mountPath }}/keystore.jks
+      volumes:
+        - name: tls-keystore
+          secret:
+            secretName: {{ .Values.tls.keystoreSecretName }}

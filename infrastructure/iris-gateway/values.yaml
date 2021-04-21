@@ -3,17 +3,28 @@
 #   production: --set environment=production
 environment: undefined
 
+tls:
+  keystoreSecretName: tls-keystore
+  keystoreCredentialsSecretName: tls-keystore-credentials
+  mountPath: /tls
+
 public:
   image: inoeg/iris-public-server:0.0.1-SNAPSHOT
-  nodePort: 30001
+  port: 8443
+  paths:
+    - /
 
 location:
   image: inoeg/iris-location-service:0.0.1-SNAPSHOT
-  nodePort: 30002
+  port: 8080
+  paths:
+    - /search
+    - /search-index
 
 postgres:
   storageDir: /var/lib/postgresql/data/pgdata
+  port: 5432
 
-# needed only if multiple deployments are needed in the same environment.
-# nodePorts need to be unique globally, for all deployments in the same environment.
-nodePortOffsets: 0
+domains:
+  test: test.iris-gateway.de
+  production: iris-gateway.de

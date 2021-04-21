@@ -23,6 +23,6 @@ spec:
           imagePullPolicy: Always
           {{- end }}
           ports:
-            - name: http
-              containerPort: 8080
+            - name: https
+              containerPort: {{ .Values.location.port }}
               protocol: TCP

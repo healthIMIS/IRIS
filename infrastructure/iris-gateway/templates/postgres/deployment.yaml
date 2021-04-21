@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: tcp
-              containerPort: 5432
+              containerPort: {{ .Values.postgres.port }}
               protocol: TCP
           env:
             - name: POSTGRES_DB
