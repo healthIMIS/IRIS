@@ -28,6 +28,8 @@ public class ServiceEndpointsConfig {
 		compositeJsonServiceExporter
 				.setServiceInterfaces(new Class<?>[] { HealthRPC.class, LocationRPC.class, AlertRPC.class });
 		compositeJsonServiceExporter.setAllowMultipleInheritance(true);
+		compositeJsonServiceExporter.setShouldLogInvocationErrors(false);
+		compositeJsonServiceExporter.setErrorResolver(new JsonRpcErrorResolver());
 
 		return compositeJsonServiceExporter;
 	}

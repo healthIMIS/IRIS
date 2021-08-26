@@ -2,6 +2,7 @@ package iris.backend_service.locations.jsonrpc;
 
 import static iris.backend_service.locations.utils.LoggingHelper.*;
 
+import iris.backend_service.config.JsonRpcDataValidator;
 import iris.backend_service.jsonrpc.JsonRpcClientDto;
 import iris.backend_service.locations.dto.LocationAddress;
 import iris.backend_service.locations.dto.LocationContact;
@@ -50,12 +51,14 @@ public class LocationRPCImpl implements LocationRPC {
 
 	private final @NotNull LocationService locationService;
 	private final @NotNull ValidationHelper validHelper;
+	private final @NotNull JsonRpcDataValidator jsonRpcDataValidator;
 
 	@Override
 	public String postLocationsToSearchIndex(JsonRpcClientDto client, List<LocationInformation> locationList) {
 
 		validateJsonRpcClientDto(client);
 		validatePostLimit(locationList, client.getName());
+		jsonRpcDataValidator.validateData(locationList);
 
 		List<LocationInformation> locationListValidated = validateLocationInformation(locationList, client.getName());
 
